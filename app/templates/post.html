@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Post</title>
+</head>
+<body>
+    <h1>Post</h1>
+    <ul>
+        {% for post in posts %}
+            {% if post.id == post_id %}
+                <li>
+                    <strong>ID:</strong> {{ post.id }} <br>
+                    <strong>Title:</strong> {{ post.title }} <br>
+                    <strong>Content:</strong> {{ post.content }}
+                </li>
+                <form action="{{ url_for('main.delete', post_id=post.id) }}" method="POST">
+                    <button type="submit">Delete</button>
+                </form>
+                <a href="{{ url_for('main.edit', post_id=post.id) }}">Edit</a>
+            {% endif %}
+        {% else %}
+            <li>No posts available.</li>
+        {% endfor %}
+    </ul>
+    
+    <a href="{{ url_for('main.index') }}">Back to home</a>
+</body>
+</html>

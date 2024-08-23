@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Edit Post</title>
+</head>
+<body>
+    <h1>Edit Post</h1>
+    {% for post in posts %}
+        {% if post.id == post_id %}
+            <form action="{{ url_for('main.edit', post_id=post.id) }}" method="POST">
+                <input type="hidden" name="_method" value="PUT">
+                <table>
+                    <tr>
+                        <td><label for="title">Title</label></td>
+                        <td><input type="text" id="title" name="title" value="{{ post.title }}" required></td>
+                    </tr>
+                    <tr>
+                        <td><label for="content">Content</label></td>
+                        <td><textarea id="content" name="content" rows="10" required>{{ post.content }}</textarea></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><button type="submit">Update Post</button></td>
+                    </tr>
+                </table>
+            </form>
+        {% endif %}
+    {% endfor %}
+    <a href="{{ url_for('main.index') }}">Back to home</a>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>게시판</title>
+</head>
+<body>
+    <h1>Notice Board</h1>
+    <a href="{{ url_for('main.create') }}">Create New Post</a>
+    <form action="{{ url_for('main.search') }}" method="GET">
+        <select name="type">
+            <option value="title">Title</option>
+            <option value="content">Context</option>
+        </select>
+        <input type="text" name="keyword" placeholder="검색어">
+        <button type="submit">Search</button>
+    </form>
+    <ul>
+        {% for post in posts %}
+        <li>
+            <a href="{{ url_for('main.view_post', post_id=post.id) }}">{{ post.id }} . {{ post.title }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

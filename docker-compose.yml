@@ -1,0 +1,46 @@
+version: "3"
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.app
+    ports:
+      - "8000:8000"  # 컨테이너의 8000 포트를 호스트의 8000 포트에 매핑
+    environment:
+      - FLASK_RUN_HOST=0.0.0.0  # Flask가 모든 인터페이스에서 접근 가능하도록 설정
+      - FLASK_RUN_PORT=8000
+      - DATABASE_HOST=db  # Flask 애플리케이션에서 데이터베이스에 연결할 때 사용할 호스트
+      - DATABASE_PORT=3306
+      - DATABASE_USER=root
+      - DATABASE_PASSWORD=password
+      - DATABASE_NAME=board
+    volumes:
+      - ./app:/app/app
+      - ./app.py:/app/app.py
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+  db:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.db
+    ports:
+      - "3306:3306"  # MySQL 데이터베이스의 포트를 호스트에 매핑
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: board
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - db_data:/var/lib/mysql  # MySQL 데이터를 유지하기 위해 볼륨 사용
+      
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  db_data:
