@@ -8,6 +8,18 @@
 </head>
 <body>
     <h1>Post</h1>
+
+    <!-- Flash 메시지 표시 -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul>
+            {% for category, message in messages %}
+                <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+    
     <ul>
         {% for post in posts %}
             {% if post.id == post_id %}
